@@ -23,6 +23,12 @@ This library requires Java 8 to run the annotation processor.
 Check the latest version in the badge above.
 
 ```groovy
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+
+```groovy
 compile "com.github.kakai248.AutoViewModelFactory:annotations:${LATEST_VERSION}"
 annotationProcessor "com.github.kakai248.AutoViewModelFactory:compiler:${LATEST_VERSION}"
 ```
