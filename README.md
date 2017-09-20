@@ -30,7 +30,7 @@ repositories {
 
 ```groovy
 compile "com.github.kakai248.AutoViewModelFactory:annotations:${LATEST_VERSION}"
-annotationProcessor "com.github.kakai248.AutoViewModelFactory:compiler:${LATEST_VERSION}"
+annotationProcessor "com.github.kakai248.AutoViewModelFactory:processor:${LATEST_VERSION}"
 ```
 
 Usage
