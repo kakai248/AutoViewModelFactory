@@ -1,6 +1,5 @@
 package com.kakai.android.autoviewmodelfactory.processor;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.kakai.android.autoviewmodelfactory.annotations.AutoViewModelFactory;
@@ -95,12 +94,6 @@ public class AutoViewModelFactoryProcessor extends AbstractProcessor {
             }
 
             TypeElement typeElement = (TypeElement) element;
-
-            if (!typeElement.getSuperclass().toString().equals(ViewModel.class.getName())) {
-                error(element, "Annotated class must extend ViewModel.");
-                return false;
-            }
-
             viewModels.add(typeElement);
         }
 
