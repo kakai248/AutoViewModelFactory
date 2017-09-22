@@ -39,4 +39,8 @@ public class MainActivity extends DaggerAppCompatActivity {
     public String getTestString() {
         return "test";
     }
+
+    public String getAnotherTestString() {
+        return "another test";
+    }
 }

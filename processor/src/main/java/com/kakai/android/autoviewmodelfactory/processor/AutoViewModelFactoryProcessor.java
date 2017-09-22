@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import com.kakai.android.autoviewmodelfactory.annotations.AutoViewModelFactory;
 import com.kakai.android.autoviewmodelfactory.processor.utils.AnnotationProcessingUtils;
 import com.kakai.android.autoviewmodelfactory.processor.utils.StringUtils;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -30,6 +31,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -125,8 +127,18 @@ public class AutoViewModelFactoryProcessor extends AbstractProcessor {
                     TypeName parameterTypeName = TypeName.get(variableElement.asType());
                     String parameterName = variableElement.getSimpleName().toString();
 
+                    // Add the annotations that each parameter has (mainly to copy @Named)
+                    List<AnnotationSpec> parameterAnnotations = new ArrayList<>();
+                    for (AnnotationMirror annotation : elements.getAllAnnotationMirrors(variableElement)) {
+                        parameterAnnotations.add(AnnotationSpec.get(annotation));
+                    }
+
                     viewModelDependencies.put(parameterName, parameterTypeName);
-                    constructorParams.add(ParameterSpec.builder(parameterTypeName, parameterName).build());
+                    constructorParams.add(
+                            ParameterSpec.builder(parameterTypeName, parameterName)
+                                    .addAnnotations(parameterAnnotations)
+                                    .build()
+                    );
                 }
             }
         }
