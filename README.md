@@ -1,8 +1,33 @@
-AutoViewModelFactory
+[DEPRECATED] AutoViewModelFactory
 =========================
 [![](https://jitpack.io/v/kakai248/AutoViewModelFactory.svg)](https://jitpack.io/#kakai248/AutoViewModelFactory)
 
 This library generates the factory for the Architecture Components ViewModel. To be used with dagger2.
+
+Why is it deprecated?
+------
+After I built this library, I found a better way of doing this. We can have a single generic factory that receives the `ViewModel` created with dagger.
+```kotlin
+class ViewModelFactory<VM : ViewModel> @Inject constructor(private val viewModel: Lazy<VM>) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return viewModel.get() as T
+    }
+}
+```
+And then inject as usual:
+```kotlin
+@Inject
+protected lateinit var viewModelFactory: ViewModelFactory<ViewModel>
+
+lateinit var viewModel: ViewModel
+    private set
+```
+```kotlin
+viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelClass())
+```
+
+`Lazy` makes sure the ViewModel is only created when Arch components call `create`. This way we let dagger create everything and still use the `ViewModelStore`.
 
 Why do you need this?
 ------
